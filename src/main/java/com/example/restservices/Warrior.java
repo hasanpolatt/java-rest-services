@@ -7,16 +7,16 @@ import jakarta.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class Car {
+public class Warrior {
 
     private @Id @GeneratedValue Long id;
 
     private String name;
     private String role;
 
-    Car() {}
+    Warrior() {}
 
-    public Car(String name, String role) {
+    public Warrior(String name, String role) {
         this.name = name;
         this.role = role;
     }
@@ -49,12 +49,20 @@ public class Car {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof Car))
+        if (!(o instanceof Warrior))
             return false;
-        Car car = (Car) o;
+        Warrior car = (Warrior) o;
         return Objects.equals(this.id, car.id) && Objects.equals(this.name, car.name)
                 && Objects.equals(this.role, car.role);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id, this.name, this.role);
+    }
 
+    @Override
+    public String toString() {
+        return "Employee{" + "id=" + this.id + ", name='" + this.name + '\'' + ", role='" + this.role + '\'' + '}';
+    }
 }
