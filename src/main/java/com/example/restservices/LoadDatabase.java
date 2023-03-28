@@ -16,6 +16,8 @@ class LoadDatabase {
         return args -> {
             log.info("Preloading" + repository.save(new Warrior("Turin Turambar", "DragonSlayer")));
             log.info("Preloading" + repository.save(new Warrior("Tuor Eladar", "Savior of Noldor")));
+            log.info("Preloading" + repository.save(new Warrior("Fingolfin Nolofinwe", "High King of Noldor")));
+            log.info("Preloading" + repository.save(new Warrior("Feanor Curufinwe", "Creator of Silmarils")));
         };
     }
 }

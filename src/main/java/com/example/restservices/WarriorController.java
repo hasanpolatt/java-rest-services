@@ -28,7 +28,7 @@ public class WarriorController {
         return repository.findById(id).orElseThrow(() -> new WarriorNotFoundException(id));
     }
 
-    @PutMapping("/warriors/{id}")
+    @PutMapping("/warrior/{id}")
     Warrior updateWarrior(@RequestBody Warrior newWarrior, @PathVariable Long id) {
 
         return repository.findById(id).map(warrior -> {
@@ -39,10 +39,10 @@ public class WarriorController {
                 .orElseGet(() -> {
                     newWarrior.setId(id);
                     return repository.save(newWarrior);
-                })
+                });
     }
 
-    @DeleteMapping("/warriors/{id}")
+    @DeleteMapping("/warrior/{id}")
     void killWarrior(@PathVariable Long id) {
         repository.deleteById(id);
     }
