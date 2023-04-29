@@ -16,7 +16,7 @@ class Warrior {
 
     public Warrior() {}
 
-    public Warrior(String firstName, String lastName, String role) {
+    Warrior(String firstName, String lastName, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
@@ -44,6 +44,14 @@ class Warrior {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -58,13 +66,14 @@ class Warrior {
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o)
             return true;
         if (!(o instanceof Warrior))
             return false;
-        Warrior car = (Warrior) o;
-        return Objects.equals(this.id, car.id) && Objects.equals(this.firstName, car.firstName)
-                && Objects.equals(this.lastName, car.lastName) && Objects.equals(this.role, car.role);
+        Warrior warrior = (Warrior) o;
+        return Objects.equals(this.id, warrior.id) && Objects.equals(this.firstName, warrior.firstName)
+                && Objects.equals(this.lastName, warrior.lastName) && Objects.equals(this.role, warrior.role);
     }
 
     @Override

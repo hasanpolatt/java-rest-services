@@ -2,11 +2,13 @@ package com.example.restservices;
 
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +33,12 @@ public class WarriorController {
     }
 
     @PostMapping("/warriors")
-    Warrior addWarrior(@RequestBody Warrior addWarrior) {
-        return repository.save(addWarrior);
+    ResponseEntity<?> addWarrior(@RequestBody Warrior addWarrior) {
+        EntityModel<Warrior> entityModel = assembler.toModel(repository.save(addWarrior));
+
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @GetMapping("/warrior/{id}")
@@ -44,21 +50,31 @@ public class WarriorController {
     }
 
     @PutMapping("/warrior/{id}")
-    Warrior updateWarrior(@RequestBody Warrior newWarrior, @PathVariable Long id) {
-
-        return repository.findById(id).map(warrior -> {
-            warrior.setName(newWarrior.getName());
-            warrior.setRole(newWarrior.getRole());
-            return repository.save(warrior);
-        })
+    ResponseEntity<?> updateWarrior(@RequestBody Warrior newWarrior, @PathVariable Long id) {
+        Warrior respawnWarrior = repository.findById(id)
+                .map(warrior -> {
+                    warrior.setFirstName(newWarrior.getFirstName());
+                    warrior.setLastName(newWarrior.getLastName());
+                    warrior.setRole(newWarrior.getRole());
+                    return repository.save(warrior);
+                })
                 .orElseGet(() -> {
                     newWarrior.setId(id);
                     return repository.save(newWarrior);
                 });
+
+        EntityModel<Warrior> entityModel = assembler.toModel(respawnWarrior);
+
+        return ResponseEntity
+                .created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @DeleteMapping("/warrior/{id}")
-    void killWarrior(@PathVariable Long id) {
+    ResponseEntity<?> killWarrior(@RequestBody Warrior warrior, @PathVariable Long id) {
         repository.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body(warrior.getFirstName() + " defeated.");
     }
 }
